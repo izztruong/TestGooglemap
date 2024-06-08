@@ -20,7 +20,7 @@ public class GeocodeResponse {
         private Address address;
         private Position position;
         private MapView mapView;
-        private Scoring scoring;
+        //private Scoring scoring;
 
         public String getTitle() {
             return title;
@@ -70,13 +70,13 @@ public class GeocodeResponse {
             this.mapView = mapView;
         }
 
-        public Scoring getScoring() {
-            return scoring;
-        }
-
-        public void setScoring(Scoring scoring) {
-            this.scoring = scoring;
-        }
+//        public Scoring getScoring() {
+//            return scoring;
+//        }
+//
+//        public void setScoring(Scoring scoring) {
+//            this.scoring = scoring;
+//        }
     }
 
     public class Address {
@@ -178,36 +178,36 @@ public class GeocodeResponse {
         }
     }
 
-    public class Scoring {
-        private double queryScore;
-        private FieldScore fieldScore;
+//    public class Scoring {
+//        private double queryScore;
+//        private FieldScore fieldScore;
+//
+//        public double getQueryScore() {
+//            return queryScore;
+//        }
+//
+//        public void setQueryScore(double queryScore) {
+//            this.queryScore = queryScore;
+//        }
+//
+//        public FieldScore getFieldScore() {
+//            return fieldScore;
+//        }
+//
+//        public void setFieldScore(FieldScore fieldScore) {
+//            this.fieldScore = fieldScore;
+//        }
+//    }
 
-        public double getQueryScore() {
-            return queryScore;
-        }
-
-        public void setQueryScore(double queryScore) {
-            this.queryScore = queryScore;
-        }
-
-        public FieldScore getFieldScore() {
-            return fieldScore;
-        }
-
-        public void setFieldScore(FieldScore fieldScore) {
-            this.fieldScore = fieldScore;
-        }
-    }
-
-    public class FieldScore {
-        private double county;
-
-        public double getCounty() {
-            return county;
-        }
-
-        public void setCounty(double county) {
-            this.county = county;
-        }
-    }
+//    public class FieldScore {
+//        private double county;
+//
+//        public double getCounty() {
+//            return county;
+//        }
+//
+//        public void setCounty(double county) {
+//            this.county = county;
+//        }
+//    }
 }

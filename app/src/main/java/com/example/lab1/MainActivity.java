@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.lab1.Search.SearchActivity;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -35,6 +37,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     GoogleMap googleMap;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
+    public static final String APIKEY="4wAzwPzeRZEcKqAbo32x39XcqauuM0uHyi3D-QTeNvc";
+    public static Double LAT_NOW=0.0;
+    public static Double LNG_NOW=0.0;
     EditText edt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +50,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             actionBar.hide();
         }
         edt=findViewById(R.id.edtplace);
-        edt.setOnClickListener(new View.OnClickListener() {
+        edt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent=new Intent();
+            public void onFocusChange(View view, boolean b) {
+                Intent intent=new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(intent);
             }
         });
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -57,15 +63,30 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
+        Intent intent=getIntent();
+        double lat= intent.getDoubleExtra("lat",0);
+        if (lat!=0){
+             //lat= intent.getDoubleExtra("lat",0);
+            double lng=intent.getDoubleExtra("lng",0);
+            String q=intent.getStringExtra("q");
+            LatLng lo = new LatLng(lat, lng);
+            CircleOptions circleOptions = new CircleOptions().center(lo).radius(10).fillColor(Color.BLUE).strokeColor(Color.BLACK).strokeWidth(2);
+            googleMap.addMarker(new MarkerOptions().position(lo));
+            googleMap.addCircle(circleOptions);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lo, 12));
+            edt.setText(q);
+        }else {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             // Quyền đã được cấp
-            System.out.println("ok");
+
             FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
             fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(Location location) {
                             if (location != null) {
                                 System.out.println(" thành công location");
+                                LAT_NOW=location.getLatitude();
+                                LNG_NOW=location.getLongitude();
                                 LatLng lo = new LatLng(location.getLatitude(), location.getLongitude());
                                 CircleOptions circleOptions = new CircleOptions().center(lo).radius(10).fillColor(Color.BLUE).strokeColor(Color.BLACK).strokeWidth(2);
                                 googleMap.addMarker(new MarkerOptions().position(lo));
@@ -80,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else {
             // Yêu cầu quyền
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+        }
         }
     }
     @Override

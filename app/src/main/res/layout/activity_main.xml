@@ -24,7 +24,7 @@
             android:textColorHint="#BAB4B4"
             android:hint="Search"
             />
-        </fragment>
+    </fragment>
 
 
 
